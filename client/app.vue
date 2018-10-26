@@ -17,7 +17,7 @@ export default {
     Header,
     Footer,
     Todo
-  }  
+  }
 }
 </script>
 
