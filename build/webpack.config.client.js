@@ -90,7 +90,7 @@ if (isDev) {
       noEmitOnErrors: true
     },
     plugins: defaultPlugins.concat([
-      new ExtractPlugin('styles.[Hash:8].css')
+      new ExtractPlugin('styles.[md5:contenthash:hex:8].css')
       // new webpack.optimize.CommonsChunkPlugin({
       //   name: 'vendor'
       // }),
