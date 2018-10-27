@@ -3,6 +3,7 @@ const HTMLPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 const merge = require('webpack-merge')
 const ExtractPlugin = require('extract-text-webpack-plugin')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const baseConfig = require('./webpack.config.base')
 
 const isDev = process.env.NODE_ENV === 'development'
@@ -20,7 +21,8 @@ const defaultPlugins = [
       NODE_ENV: isDev ? '"development"' : '"production"'
     }
   }),
-  new HTMLPlugin()
+  new HTMLPlugin(),
+  new VueLoaderPlugin()
 ]
 let config
 
@@ -47,15 +49,15 @@ if (isDev) {
     },
     devServer,
     plugins: defaultPlugins.concat([
-      new webpack.HotModuleReplacementPlugin(),
-      new webpack.NoEmitOnErrorsPlugin()
+      new webpack.HotModuleReplacementPlugin()
+      // new webpack.NoEmitOnErrorsPlugin()
     ])
   })
 } else {
   config = merge(baseConfig, {
     entry: {
-      app: path.join(__dirname, '../client/index.js'),
-      vendor: ['vue']
+      app: path.join(__dirname, '../client/index.js')
+      // vendor: ['vue'] webpack4 SplitChunkPlugin 默认会将 node_modules 里文件打包到 vendor 里面
     },
     output: {
       filename: '[name].[chunkhash:8].js'
@@ -80,15 +82,22 @@ if (isDev) {
         }
       ]
     },
-    plugins: [
-      new ExtractPlugin('styles.[contentHash:8].css'),
-      new webpack.optimize.CommonsChunkPlugin({
-        name: 'vendor'
-      }),
-      new webpack.optimize.CommonsChunkPlugin({
-        name: 'runtime'
-      })
-    ]
+    optimization: {
+      splitChunks: {
+        chunks: 'all'
+      },
+      runtimeChunk: true,
+      noEmitOnErrors: true
+    },
+    plugins: defaultPlugins.concat([
+      new ExtractPlugin('styles.[Hash:8].css')
+      // new webpack.optimize.CommonsChunkPlugin({
+      //   name: 'vendor'
+      // }),
+      // new webpack.optimize.CommonsChunkPlugin({
+      //   name: 'runtime'
+      // })
+    ])
   })
 }
 
