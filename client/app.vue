@@ -2,21 +2,31 @@
   <div id="app">
     <div id="cover"></div>
     <Header></Header>
-    <Todo></Todo>
+    <router-link to="/app">app</router-link>
+    <router-link to="/login">login</router-link>
+    <!-- <router-link to="/login/exact">login exact</router-link> -->
+    <!-- <Todo></Todo> -->
+    <transition name="fade">
+      <router-view />
+    </transition>
     <Footer></Footer>
+    <!-- <router-view name="a"/> -->
   </div>
 </template>
 
 <script>
 import Header from './layout/header.vue'
 import Footer from './layout/footer.jsx'
-import Todo from './views/todo/todo.vue'
+// import Todo from './views/todo/todo.vue'
 
 export default {
   components: {
     Header,
-    Footer,
-    Todo
+    Footer
+    // Todo
+  },
+  mounted () {
+    // console.log(this.$route)
   }
 }
 </script>

@@ -8,12 +8,16 @@ const baseConfig = require('./webpack.config.base')
 
 const isDev = process.env.NODE_ENV === 'development'
 const devServer = {
-  port: 8000,
-  host: '0.0.0.0',
+  port: 7000,
+  // host: '0.0.0.0',
   overlay: {
     errors: true
   },
-  hot: true
+  historyApiFallback: { // 任意的 404 响应都可能需要被替代为 index.html
+    index: '/public/index.html'
+  },
+  hot: true,
+  open: true
 }
 const defaultPlugins = [
   new webpack.DefinePlugin({
